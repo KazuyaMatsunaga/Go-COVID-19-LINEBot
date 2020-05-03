@@ -1,0 +1,26 @@
+version: "3.7"
+services:
+  covid-19-bot:
+    container_name: covid-19-bot-container
+    build: .
+    volumes:
+      - .:/go/src/covid-19-bot/
+    environment:
+      - LINE_CHANNEL_SECRET
+      - LINE_CHANNEL_TOKEN
+      - LINE_USER_ID
+    depends_on:
+      - db
+  db:
+    image: mysql:5.7
+    container_name: covid-19-bot-db
+    volumes:
+      - ./data/mysql:/var/lib/mysql:cached
+      - ./db/my.cnf:/etc/mysql/conf.d/my.cnf
+    ports:
+      - 3306:3306 # 開放するポート
+    environment:
+      MYSQL_ROOT_PASSWORD: docker_pwd
+      MYSQL_DATABASE: covid19
+      MYSQL_USER: user1
+      MYSQL_PASSWORD: Password_01
