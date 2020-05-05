@@ -57,7 +57,7 @@ func pushMessage() {
 
 	log.Printf("%s: Cases=%d , Deaths=%d\n", info[12].Name, info[12].Cases, info[12].Deaths) //　東京の場合は12,都道府県によって数字は変更
 
-	message := time_now + "\n" + info[12].Name + "都内のCOVID-19感染情報\n\n" + "総感染者数：" + strconv.Itoa(info[12].Cases) + "\n総死者数：" + strconv.Itoa(info[12].Deaths) + "\n\n前日比\n" + "感染者数：" + cases_before + "\n" + "死者数：" + deaths_before
+	message := time_now + "\n" + info[12].Name + "都内のCOVID-19感染情報\n\n" + "総感染者数：" + strconv.Itoa(info[12].Cases) + "\n総死者数：" + strconv.Itoa(info[12].Deaths) + "\n\n前日比\n" + "総感染者数：" + cases_before + "\n" + "総死者数：" + deaths_before
 
 	line_message := linebot.NewTextMessage(message)
 
@@ -73,7 +73,6 @@ func pushMessage() {
 	if _, err := bot.PushMessage(os.Getenv("LINE_USER_ID"), messages...).Do(); err != nil {
 		log.Fatal(err)
 	}
-
 }
 
 // 今日の情報を取得
@@ -116,11 +115,10 @@ func registerDB(info []Info) {
 
 	var covid19_info entity.Covid19Info
 
-	db, err := gorm.Open("mysql", "user1:Password_01@tcp(docker.for.mac.localhost:4406)/covid19?charset=utf8&parseTime=True")
+	db, err := gorm.Open("mysql", "user1:Password_01@tcp(docker.for.mac.localhost:3306)/covid19?charset=utf8&parseTime=True")
 	if err != nil {
 		log.Println(err)
 	}
-	defer db.Close()
 
 	cases_today = info[12].Cases
 	deaths_today = info[12].Deaths
@@ -146,20 +144,28 @@ func getTheDayBefore(info []Info) (cases string, deaths string) {
 	var covid19_info_before entity.Covid19Info
 	var covid19_info entity.Covid19Info
 
-	db, err := gorm.Open("mysql", "user1:Password_01@tcp(docker.for.mac.localhost:4406)/covid19?charset=utf8&parseTime=True")
+	db, err := gorm.Open("mysql", "user1:Password_01@tcp(docker.for.mac.localhost:3306)/covid19?charset=utf8&parseTime=True")
 	if err != nil {
 		log.Println(err)
 	}
-	defer db.Close()
 
+	//　今日のデータを取得
 	if err := db.Where("cases = ?", info[12].Cases).First(&covid19_info).Error; err != nil {
 		log.Println(err)
 	}
 
-	if err := db.Where(&covid19_info_before, covid19_info.ID-1).Error; err != nil {
-		log.Println(err)
-	}
+	before_id := covid19_info.ID - 1
 
+	// 前日のデータを取得
+	if err := db.Where("id = ?", before_id).First(&covid19_info_before).Error; err != nil {
+		log.Fatal(err)
+	}
+	defer db.Close()
+
+	log.Printf("今日のデータ：Id=%d , Cases=%d , Deaths=%d\n", covid19_info.ID, covid19_info.Cases, covid19_info.Deaths)
+	log.Printf("前日のデータ：Id=%d , Cases=%d , Deaths=%d\n", covid19_info_before.ID, covid19_info_before.Cases, covid19_info_before.Deaths)
+
+	// 前日比を計算
 	cases_before = covid19_info.Cases - covid19_info_before.Cases
 	deaths_before = covid19_info.Deaths - covid19_info_before.Deaths
 
@@ -167,7 +173,7 @@ func getTheDayBefore(info []Info) (cases string, deaths string) {
 		cases_before_str = "+" + strconv.Itoa(cases_before)
 	} else if cases_before < 0 {
 		cases_before_str = "-" + strconv.Itoa(cases_before)
-	} else {
+	} else if cases_before == 0 {
 		cases_before_str = "±" + strconv.Itoa(cases_before)
 	}
 
@@ -175,7 +181,7 @@ func getTheDayBefore(info []Info) (cases string, deaths string) {
 		deaths_before_str = "+" + strconv.Itoa(deaths_before)
 	} else if deaths_before < 0 {
 		deaths_before_str = "-" + strconv.Itoa(deaths_before)
-	} else {
+	} else if deaths_before == 0 {
 		deaths_before_str = "±" + strconv.Itoa(deaths_before)
 	}
 
