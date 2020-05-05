@@ -36,7 +36,7 @@ loop:
 				log.Println("interrupt")
 				break loop
 			}
-		case <-time.After(24 * time.Hour):
+		case <-time.After(24 * time.Hour): // 24時間おきに実行
 			{
 				pushMessage()
 			}
