@@ -36,7 +36,7 @@ loop:
 				log.Println("interrupt")
 				break loop
 			}
-		case <-time.After(60 * time.Second):
+		case <-time.After(24 * time.Hour):
 			{
 				pushMessage()
 			}
