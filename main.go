@@ -28,10 +28,6 @@ func main() {
 	sc := make(chan os.Signal, 1)   // シグナル用のチャンネル作って
 	signal.Notify(sc, os.Interrupt) // シグナルを登録する
 
-	// 最初のデータを登録する
-	info, _ := getInfo()
-	registerDB(info)
-
 loop:
 	for {
 		select {
