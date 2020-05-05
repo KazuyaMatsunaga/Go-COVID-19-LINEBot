@@ -9,7 +9,7 @@ import (
 )
 
 func main() {
-	db, err := gorm.Open("mysql", "user1:Password_01@tcp(localhost:3306)/covid19?charset=utf8&parseTime=True")
+	db, err := gorm.Open("mysql", "user1:Password_01@tcp(db:3306)/covid19?charset=utf8&parseTime=True")
 	if err != nil {
 		log.Println(err)
 	}

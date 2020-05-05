@@ -115,7 +115,7 @@ func registerDB(info []Info) {
 
 	var covid19_info entity.Covid19Info
 
-	db, err := gorm.Open("mysql", "user1:Password_01@tcp(localhost:3306)/covid19?charset=utf8&parseTime=True")
+	db, err := gorm.Open("mysql", "user1:Password_01@tcp(db:3306)/covid19?charset=utf8&parseTime=True")
 	if err != nil {
 		log.Println(err)
 	}
@@ -144,7 +144,7 @@ func getTheDayBefore(info []Info) (cases string, deaths string) {
 	var covid19_info_before entity.Covid19Info
 	var covid19_info entity.Covid19Info
 
-	db, err := gorm.Open("mysql", "user1:Password_01@tcp(localhost:3306)/covid19?charset=utf8&parseTime=True")
+	db, err := gorm.Open("mysql", "user1:Password_01@tcp(db:3306)/covid19?charset=utf8&parseTime=True")
 	if err != nil {
 		log.Println(err)
 	}
