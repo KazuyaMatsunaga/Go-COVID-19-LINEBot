@@ -36,7 +36,7 @@ loop:
 				log.Println("interrupt")
 				break loop
 			}
-		case <-time.After(24 * time.Hour): // 24時間おきに実行
+		case <-time.After(3 * time.Second): // 24時間おきに実行
 			{
 				pushMessage()
 			}
@@ -168,7 +168,7 @@ func getTheDayBefore(info []Info) (cases string, deaths string) {
 	if cases_before > 0 {
 		cases_before_str = "+" + strconv.Itoa(cases_before)
 	} else if cases_before < 0 {
-		cases_before_str = "-" + strconv.Itoa(cases_before)
+		cases_before_str = strconv.Itoa(cases_before)
 	} else if cases_before == 0 {
 		cases_before_str = "±" + strconv.Itoa(cases_before)
 	}
@@ -176,7 +176,7 @@ func getTheDayBefore(info []Info) (cases string, deaths string) {
 	if deaths_before > 0 {
 		deaths_before_str = "+" + strconv.Itoa(deaths_before)
 	} else if deaths_before < 0 {
-		deaths_before_str = "-" + strconv.Itoa(deaths_before)
+		deaths_before_str = strconv.Itoa(deaths_before)
 	} else if deaths_before == 0 {
 		deaths_before_str = "±" + strconv.Itoa(deaths_before)
 	}
