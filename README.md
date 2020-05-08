@@ -4,10 +4,10 @@
 
 ![imgur](https://i.imgur.com/7KpHvKJ.jpg)
 
-友達追加は以下↓から
-<a href="https://lin.ee/4cDDSaszq"><img src="https://scdn.line-apps.com/n/line_add_friends/btn/ja.png" alt="友だち追加" height="36" border="0"></a>
+友達追加は以下↓から<br>
+<a href="https://lin.ee/4cDDSaszq"><img src="https://scdn.line-apps.com/n/line_add_friends/btn/ja.png" alt="友だち追加" height="36" border="0"></a><br>
 
-QRコード↓
+QRコード↓<br>
 ![imgur](https://i.imgur.com/mDHYrzX.png)
 
 ## 使用技術
